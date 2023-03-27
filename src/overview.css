@@ -1,0 +1,37 @@
+*{
+	box-sizing: border-box;
+	margin: 0;
+}
+html{
+	height: 100%;
+}
+body{
+	height: 100%;
+}
+
+.preview-card {
+	display: inline-block;
+	width: 10em;
+	height: 20em;
+	margin: 1em;
+
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: white;
+
+	text-align: center;
+}
+
+body {
+    background:#ebebeb;
+}
+nav {
+	position: sticky;
+	width: 100%;
+	height: 60px;
+	background-color: #c8c8c8;
+	text-align: center;
+
+	font-size: 46px;
+}
