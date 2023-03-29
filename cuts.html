@@ -48,7 +48,7 @@
 
         function traverse(rootTag, maxDeepness, tagCallback, path = "") {
           if (!rootTag.tagName) return;
-          var myPath = path + "." + rootTag.tagName;
+          let myPath = path + "." + rootTag.tagName;
           tagCallback(myPath, rootTag);
 
           if (maxDeepness > 0) {

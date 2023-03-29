@@ -11,6 +11,10 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
@@ -21,6 +25,8 @@
       const cardTemplate = (data) => `
 		<a href='deepzoom.html#${data.id}' class='preview-card' style='background-image: url(${data.url})'>
 			<p class='slide-id'>${data.id}</p>
+      <i class="bi bi-bag-check-fill"></i>
+      <i class="bi bi-bag-dash"></i>
 		</a>`;
 
       $(document).ready(() => {
