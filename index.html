@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Krang Dataset</title>
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta
+      name="viewport"
+      content="width = device - width, initial-scale = 1.0, shrink-to-fit = no"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
     <script src="src/krang-dataset.js"></script>
-    <link href="src/overview.css" rel="stylesheet">
+    <link href="src/overview.css" rel="stylesheet" />
 
     <script>
-      const cardTemplate = data => `
+      const cardTemplate = (data) => `
 		<a href='deepzoom.html#${data.id}' class='preview-card' style='background-image: url(${data.url})'>
 			<p class='slide-id'>${data.id}</p>
 		</a>`;
 
       $(document).ready(() => {
-        const overviewRoot = $("#overview")
+        const overviewRoot = $("#overview");
 
-        krang_listPreviews().then(list => {
-          list.forEach(data => overviewRoot.append(cardTemplate(data)));
-		});
+        krang_listPreviews().then((list) => {
+          list.forEach((data) => overviewRoot.append(cardTemplate(data)));
+        });
       });
-
     </script>
   </head>
 
   <body>
     <nav class="cuts"><a href="cuts.html">Cuts</a></nav>
     <div class="container">
-
-      <h1>Сканы гистологических препаратов головного мозга </h1>
+      <h1>Сканы гистологических препаратов головного мозга</h1>
 
       <div id="overview"></div>
-
-    </div> <!-- /container -->
-
+    </div>
+    <!-- /container -->
   </body>
-
 </html>

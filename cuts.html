@@ -1,79 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
-    <link href="src/overview.css" rel="stylesheet">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width = device - width, initial-scale = 1.0, shrink-to-fit = no"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+    <link href="src/overview.css" rel="stylesheet" />
     <title>Krang Dataset - Cuts</title>
     <script>
+      async function onLoad() {
+        try {
+          const filenames = await loadList();
+          list = document.getElementById("cuts_list");
 
+          filenames.forEach((filename) => {
+            const fragmentId = filename.slice(0, 53);
+            list.insertAdjacentHTML(
+              "beforeend",
+              `<li><a href="/${filename}">${fragmentId}.tiff</a> (<a href="cut.html#${fragmentId}">просмотреть</a>)</li>`
+            );
+          });
+        } catch (e) {
+          document.body.insertAdjacentHTML(
+            "beforeend",
+            `<h2 style="color: darkred">Не могу загрузить список фрагментов!</h2>`
+          );
+          console.error("Can't load list of files: ", e);
+        }
+      }
 
-	async function onLoad()
-	{
-		try {
-			const filenames = await loadList();
-			list = document.getElementById("cuts_list");
+      async function loadList() {
+        const filenames = [];
 
-			filenames.forEach((filename) => {
-				const fragmentId = filename.slice(0,53);
-				list.insertAdjacentHTML('beforeend', `<li><a href="/${filename}">${fragmentId}.tiff</a> (<a href="cut.html#${fragmentId}">просмотреть</a>)</li>`)
-			});
+        let response = await fetch(
+          "https://storage.yandexcloud.net/krang-dataset?list-type=2"
+        );
+        let text = await response.text();
+        console.log("response", response);
+        let parser = new DOMParser();
+        let doc = await parser.parseFromString(text, "text/xml");
 
-		} catch(e) {
-			document.body.insertAdjacentHTML('beforeend', `<h2 style="color: darkred">Не могу загрузить список фрагментов!</h2>`)
-			console.error("Can't load list of files: ", e);
-		}
-	}
+        function traverse(rootTag, maxDeepness, tagCallback, path = "") {
+          if (!rootTag.tagName) return;
+          var myPath = path + "." + rootTag.tagName;
+          tagCallback(myPath, rootTag);
 
-	async function loadList()
-	{
-
-			const filenames = []
-
-            let response = await fetch("https://storage.yandexcloud.net/krang-dataset?list-type=2")
-            let text = await response.text()
-            console.log("response", response)
-            let parser = new DOMParser()
-            let doc = await parser.parseFromString(text, "text/xml")
-
-            function traverse(rootTag, maxDeepness, tagCallback, path=""){
-                if(!rootTag.tagName) return;
-                var myPath = path + "." + rootTag.tagName;
-                tagCallback(myPath, rootTag);
-
-                if(maxDeepness > 0) {
-                    rootTag.childNodes.forEach((child) => {traverse(child, maxDeepness-1, tagCallback, myPath)})
-                }
-            }
-
-
-            const previewPattern = /^[0-9a-f]{12}-cut__.*/
-
-            traverse(doc.documentElement, 5, (path, tag)=>{
-                if(path == ".ListBucketResult.Contents.Key"){
-                    //console.log("filename", tag.textContent)
-                    if(previewPattern.test(tag.textContent)){
-                        filenames.push(tag.textContent);
-                    }
-                }
+          if (maxDeepness > 0) {
+            rootTag.childNodes.forEach((child) => {
+              traverse(child, maxDeepness - 1, tagCallback, myPath);
             });
+          }
+        }
 
-            console.log("filenames", filenames);
-            return filenames;
+        const previewPattern = /^[0-9a-f]{12}-cut__.*/;
 
-    }
+        traverse(doc.documentElement, 5, (path, tag) => {
+          if (path == ".ListBucketResult.Contents.Key") {
+            //console.log("filename", tag.textContent)
+            if (previewPattern.test(tag.textContent)) {
+              filenames.push(tag.textContent);
+            }
+          }
+        });
 
-
+        console.log("filenames", filenames);
+        return filenames;
+      }
     </script>
-    </head>
+  </head>
 
-<body onload="onLoad();">
-    <nav style="justify-content:center; margin-bottom:0;"><a href="index.html">Main</a></nav>
+  <body onload="onLoad();">
+    <nav style="justify-content: center; margin-bottom: 0">
+      <a href="index.html">Main</a>
+    </nav>
     <main style="padding: 1em 2em">
-	<h1>Фрагменты гистологических сканов головного мозга</h1>
-	<ul id="cuts_list"></ul>
+      <h1>Фрагменты гистологических сканов головного мозга</h1>
+      <ul id="cuts_list"></ul>
     </main>
-</body>
+  </body>
 </html>
