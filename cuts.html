@@ -41,8 +41,8 @@
         let response = await fetch(
           "https://storage.yandexcloud.net/krang-dataset?list-type=2"
         );
+
         let text = await response.text();
-        console.log("response", response);
         let parser = new DOMParser();
         let doc = await parser.parseFromString(text, "text/xml");
 
@@ -62,7 +62,6 @@
 
         traverse(doc.documentElement, 5, (path, tag) => {
           if (path == ".ListBucketResult.Contents.Key") {
-            //console.log("filename", tag.textContent)
             if (previewPattern.test(tag.textContent)) {
               filenames.push(tag.textContent);
             }
