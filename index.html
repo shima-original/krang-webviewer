@@ -19,22 +19,19 @@
     <link href="src/overview.css" rel="stylesheet" />
 
     <script>
-      const cardTemplate = (data) => {
-        const httpResponseStatus = 200,
-          fileExists = httpResponseStatus === 200;
-
+      const Card = ({ id, fragmentURL, previewURL }) => {
         const classes = {
-          fileExistsIcon: fileExists ? "" : "hidden",
-          noFileIcon: fileExists ? "hidden" : "",
+          fileExistsIcon: fragmentURL ? "" : "hidden",
+          noFileIcon: fragmentURL ? "hidden" : "",
         };
 
         return `
           <a
-            href='deepzoom.html#${data.id}'
+            href='deepzoom.html#${id}'
             class='preview-card'
-            style='background-image: url(${data.url})'
+            style='background-image: url(${previewURL})'
           >
-            <p class='slide-id'>${data.id}</p>
+            <p class='slide-id'>${id}</p>
 
             <svg
               class="bi bi-bag-check-fill ${classes.fileExistsIcon}"
@@ -74,15 +71,28 @@
       $(document).ready(() => {
         const overviewRoot = $("#overview");
 
-        krang_listPreviews().then((list) => {
-          list.forEach((data) => overviewRoot.append(cardTemplate(data)));
+        loadFragmentsCollection().then((entries) => {
+          /*
+           * Making the fragments registry available globally once the data is downloaded
+           */
+          window.fragments = entries;
+
+          Object.values(entries).forEach((entry) =>
+            /*
+             * Only render entries with preview URL existing
+             */
+            entry.previewURL ? overviewRoot.append(Card(entry)) : void null
+          );
         });
       });
     </script>
   </head>
 
   <body>
-    <nav class="cuts"><a href="cuts.html">Cuts</a></nav>
+    <nav class="cuts">
+      <!-- <a href="cuts.html">Cuts ( deprecated )</a> -->
+    </nav>
+
     <div class="container">
       <h1>Сканы гистологических препаратов головного мозга</h1>
 

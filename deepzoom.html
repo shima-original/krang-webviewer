@@ -1,97 +1,142 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Krang Dataset - DeepZoom Viewer</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet">    
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
-	
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+
     <script>
-		const slideId = document.URL.slice(-12)
+      const slideId = document.URL.slice(-12);
 
-        $(document).ready(() => {
-			$('.slideId').append(slideId)
-            $('#downloadslide').append(`<a href="https://krang-dataset.website.yandexcloud.net/${slideId}.tiff">Скачать слайд ${slideId}.tiff</a>`);
-            
-            var bounds = [[0, 0], [-1500, 1000]];
+      $(document).ready(() => {
+        $(".slideId").append(slideId);
+        $("#downloadslide").append(
+          `<a href="https://krang-dataset.website.yandexcloud.net/${slideId}.tiff">Скачать слайд ${slideId}.tiff</a>`
+        );
 
-            // Init Leaflet
-            var map = L.map('map', {
-                crs: L.CRS.Simple,
-                maxBounds: bounds
-            });
-        
-            
-            L.tileLayer('http://krang-dataset.website.yandexcloud.net/deepzoom/{id}/{z}/{y}/{x}.jpg', {
-                id: slideId,
-                minZoom: -3,
-                maxZoom: 8,
-                minNativeZoom: 0,
-                maxNativeZoom: 7,
-                tileSize: 2048,
-                noWrap: true,
-                attributionControl: false,
-                bounds: bounds
-            }).addTo(map);
-            
-            map.setView([-200, 180], -1)
+        var bounds = [
+          [0, 0],
+          [-1500, 1000],
+        ];
 
-            map.on('click', e => {console.debug("Clicked on:", e.latlng)});
-		});
+        // Init Leaflet
+        var map = L.map("map", {
+          crs: L.CRS.Simple,
+          maxBounds: bounds,
+        });
+
+        L.tileLayer(
+          "http://krang-dataset.website.yandexcloud.net/deepzoom/{id}/{z}/{y}/{x}.jpg",
+          {
+            id: slideId,
+            minZoom: -3,
+            maxZoom: 8,
+            minNativeZoom: 0,
+            maxNativeZoom: 7,
+            tileSize: 2048,
+            noWrap: true,
+            attributionControl: false,
+            bounds: bounds,
+          }
+        ).addTo(map);
+
+        map.setView([-200, 180], -1);
+
+        map.on("click", (e) => {
+          console.debug("Clicked on:", e.latlng);
+        });
+      });
     </script>
-	<style>
-		html, body {
-			height: 100%;
-			margin: 0;
-		}
-		.leaflet-container {
-			height: 60em;
-			width: 60vw;
-			max-width: 100%;
-			max-height: 100%;
-            border: 2px solid cyan;
-            background: white;
-		}
-		.leaflet-control-attribution {
-			display: none;
-		}
-        
-        #metainfo {
-            position: absolute;
-            right: 1em;
-            top: 2em;
-            width: 30vw;
-        }
-	</style>
-    
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      .leaflet-container {
+        height: 60em;
+        width: 60vw;
+        max-width: 100%;
+        max-height: 100%;
+        border: 2px solid cyan;
+        background: white;
+      }
+      .leaflet-control-attribution {
+        display: none;
+      }
+
+      #metainfo {
+        position: absolute;
+        right: 1em;
+        top: 2em;
+        width: 30vw;
+      }
+    </style>
   </head>
 
   <body>
     <div class="container">
+      <h1>
+        Слайд
+        <span class="slideId"></span>
+      </h1>
 
-      <h1>Слайд <span class="slideId"></span></h1>
-      
-      <div id='map'></div>
-      
+      <div id="map"></div>
+
       <table id="metainfo">
-          <tr><td>Код</td><td class="slideId"></td></tr>
-          <tr><td>Пол</td><td>M</td></tr>
-          <tr><td>Возраст на момент забора образца</td><td>56</td></tr>
-          <tr><td>Предварительный диагноз</td><td>глиома головного мозга</td></tr>
-          <tr><td>Верификация</td><td>глиобластома Грейд 4</td></tr>
-          <tr><td>Окончательный диагноз</td><td>глиобластома Грейд 4</td></tr>
-          <tr><td>Разное/примечания</td><td>глиома головного мозга</td></tr>
-          <tr><td>Источник препарата</td><td><a href="#">ДГТУ</a></td></tr>
-          <tr><td colspan=2 id="downloadslide"></td></tr>          
+        <tr>
+          <td>Код</td>
+          <td class="slideId"></td>
+        </tr>
+        <tr>
+          <td>Пол</td>
+          <td>M</td>
+        </tr>
+        <tr>
+          <td>Возраст на момент забора образца</td>
+          <td>56</td>
+        </tr>
+        <tr>
+          <td>Предварительный диагноз</td>
+          <td>глиома головного мозга</td>
+        </tr>
+        <tr>
+          <td>Верификация</td>
+          <td>глиобластома Грейд 4</td>
+        </tr>
+        <tr>
+          <td>Окончательный диагноз</td>
+          <td>глиобластома Грейд 4</td>
+        </tr>
+        <tr>
+          <td>Разное/примечания</td>
+          <td>глиома головного мозга</td>
+        </tr>
+        <tr>
+          <td>Источник препарата</td>
+          <td><a href="#">ДГТУ</a></td>
+        </tr>
+        <tr><td colspan="2" id="downloadslide"></td></tr>
       </table>
-
-    </div> <!-- /container -->
-
+    </div>
+    <!-- /container -->
   </body>
-
 </html>
