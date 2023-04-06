@@ -1,62 +1,97 @@
-function traverseXmlDoc(rootTag, maxDeepness, tagCallback, path = "") {
-  if (!rootTag.tagName) return;
-  var myPath = path + "." + rootTag.tagName;
-  tagCallback(myPath, rootTag);
+const parser = new DOMParser();
 
-  if (maxDeepness > 0) {
-    rootTag.childNodes.forEach((child) => {
-      traverseXmlDoc(child, maxDeepness - 1, tagCallback, myPath);
-    });
+const patterns = {
+  fragment: /[0-9a-f]{12}-cut/,
+  fragmentId: /[0-9a-f]{12}/,
+  preview: /[0-9a-f]{12}-preview.jpg/,
+};
+
+function traverseXMLDocument(rootNode, maxDepth, nodeHandler, path = "") {
+  if (!rootNode.tagName) {
+    return void null;
+  } else {
+    const nodePath = path + "." + rootNode.tagName;
+
+    nodeHandler(nodePath, rootNode);
+
+    if (maxDepth > 0) {
+      rootNode.childNodes.forEach((child) => {
+        traverseXMLDocument(child, maxDepth - 1, nodeHandler, nodePath);
+      });
+    }
   }
 }
 
-async function loadCollection() {
+async function loadFragmentsCollection() {
   try {
-    const parser = new DOMParser();
-
-    const URLprefix = "https://krang-dataset.website.yandexcloud.net/";
-
     const response = await fetch(
       "https://storage.yandexcloud.net/krang-dataset?list-type=2"
     );
 
-    const doc = parser.parseFromString(await response.text(), "text/xml");
-
     let entries = {};
 
-    const patterns = {
-      fragment: /[0-9a-f]{12}-cut/,
-      preview: /[0-9a-f]{12}-preview.jpg/,
-    };
+    traverseXMLDocument(
+      parser.parseFromString(await response.text(), "text/xml").documentElement,
+      5,
 
-    traverseXmlDoc(doc.documentElement, 5, (path, tag) => {
-      if (path === ".ListBucketResult.Contents.Key") {
-        const isFragment = patterns.fragment.test(tag.textContent),
-          isPreview = patterns.preview.test(tag.textContent);
+      /**
+       * Parses XML node data and appends it to the collection
+       */
+      (path, xmlNode) => {
+        if (path === ".ListBucketResult.Contents.Key") {
+          /*
+           * Get fragment's id if it's possible
+           */
+          const fragmentId = xmlNode.textContent
+            .match(patterns.fragmentId)
+            ?.at(0);
 
-        const id = tag.textContent.split("/");
+          if (fragmentId) {
+            const URL = `https://krang-dataset.website.yandexcloud.net/${xmlNode.textContent}`;
 
-        console.log(id);
+            entries = {
+              /*
+               * Extend the existing collection data
+               */
+              ...entries,
 
-        entries = {
-          ...entries,
+              /*
+               * Index fragments by id
+               */
+              [fragmentId]: {
+                /*
+                 * Make every fragment "know" its position in the collection
+                 */
+                id: fragmentId,
 
-          [id]: {
-            ...(entries[id] ?? {}),
+                /*
+                 * Extend the existing fragment data if it exists
+                 */
+                ...(entries[fragmentId] ?? {}),
 
-            id,
-            fragmentURL: isFragment ? URLprefix + tag.textContent : null,
-            previewURL: isPreview ? URLprefix + tag.textContent : null,
-          },
-        };
+                /*
+                 * Append fragments file URL if it's detected
+                 */
+                ...(patterns.fragment.test(xmlNode.textContent)
+                  ? { fragmentURL: URL }
+                  : {}),
+
+                /*
+                 * Append fragments preview file URL if it's detected
+                 */
+                ...(patterns.preview.test(xmlNode.textContent)
+                  ? { previewURL: URL }
+                  : {}),
+              },
+            };
+          }
+        }
       }
-    });
+    );
 
-    console.log(entries);
-
-    return entries;
+    return entries ?? {};
   } catch (error) {
     console.error("Error while loading data", error);
-    return null;
+    return {};
   }
 }

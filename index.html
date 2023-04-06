@@ -71,9 +71,16 @@
       $(document).ready(() => {
         const overviewRoot = $("#overview");
 
-        loadCollection().then((entries) => {
+        loadFragmentsCollection().then((entries) => {
+          /*
+           * Making the fragments registry available globally once the data is downloaded
+           */
+          window.fragments = entries;
+
           Object.values(entries).forEach((entry) =>
-            /* Only render entries with preview URL existing */
+            /*
+             * Only render entries with preview URL existing
+             */
             entry.previewURL ? overviewRoot.append(Card(entry)) : void null
           );
         });
