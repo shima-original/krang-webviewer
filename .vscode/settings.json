@@ -1,0 +1,60 @@
+{
+	"[html]": {
+		"editor.defaultFormatter": "svipas.prettier-plus"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "svipas.prettier-plus",
+		"editor.formatOnSave": true
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "svipas.prettier-plus",
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "svipas.prettier-plus",
+		"editor.formatOnSave": true
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "svipas.prettier-plus",
+		"editor.formatOnSave": true
+	},
+	"[css]": {
+		"editor.defaultFormatter": "svipas.prettier-plus",
+		"editor.formatOnSave": true
+	},
+	"editor.rulers": [
+		80,
+		100
+	],
+	"editor.semanticHighlighting.enabled": true,
+	"editor.tabSize": 2,
+	"errorLens.followCursor": "allLinesExceptActive",
+	"errorLens.messageBackgroundMode": "line",
+	"errorLens.scrollbarHackEnabled": true,
+	"errorLens.margin": "1%",
+	"errorLens.fontSize": "19px",
+	"errorLens.fontStyleItalic": true,
+	"errorLens.gutterIconSet": "borderless",
+	"errorLens.replaceLinebreaksSymbol": "\t",
+	"errorLens.statusBarMessageEnabled": true,
+	"errorLens.statusBarCommand": "goToProblem",
+	"errorLens.statusBarColorsEnabled": true,
+	"errorLens.statusBarMessageType": "activeLine",
+	"explorer.incrementalNaming": "smart",
+	"explorer.sortOrder": "filesFirst",
+	"files.eol": "\n",
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"javascript.preferences.quoteStyle": "double",
+	"path-intellisense.extensionOnImport": true,
+	"prettier.eslintIntegration": true,
+	"mergeEditor.diffAlgorithm": "experimental",
+	"workbench.colorTheme": "Outrunner",
+	"workbench.editor.pinnedTabSizing": "shrink",
+	"workbench.editor.highlightModifiedTabs": true,
+	"workbench.iconTheme": "emoji-file-icons",
+	"zenMode.hideTabs": false,
+	"cSpell.words": [
+		"deepzoom",
+		"Krang"
+	]
+}
