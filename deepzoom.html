@@ -25,17 +25,41 @@
       crossorigin=""
     ></script>
 
+    <script src="src/main.js"></script>
+    <link href="src/main.css" rel="stylesheet" />
+
     <script>
+      globalThis.store = { ...(globalThis.store ?? {}) };
+
       const slideId = document.URL.slice(-12);
 
       $(document).ready(() => {
         $(".slideId").append(slideId);
 
-        $("#downloadslide").append(`
-					<a href="https://krang-dataset.website.yandexcloud.net/${slideId}.tiff">
-						Скачать слайд ${slideId}.tiff
-					</a>
-				`);
+        loadFragmentsCollection().then((fragments) => {
+          if (!globalThis.store.fragments) {
+            /*
+             * Making the fragments registry available globally once the data is downloaded
+             */
+            globalThis.store = { ...globalThis.store, fragments };
+          }
+
+          const { fragmentURL } = fragments[slideId];
+
+          $("#downloadslide").append(
+            fragmentURL
+              ? `
+								<a class="text-success link" href="${fragmentURL}">
+									Скачать слайд ${slideId}
+								</a>
+							`
+              : `
+								<a class="text-error" disabled>
+									Файл слайда не найден
+								</a>
+							`
+          );
+        });
 
         const bounds = [
           [0, 0],
@@ -72,12 +96,6 @@
     </script>
 
     <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-      }
-
       .leaflet-container {
         height: 60em;
         width: 60vw;
@@ -90,63 +108,72 @@
       .leaflet-control-attribution {
         display: none;
       }
-
-      #metainfo {
-        position: absolute;
-        right: 1em;
-        top: 2em;
-        width: 30vw;
-      }
     </style>
   </head>
 
   <body>
-    <div class="container">
+    <nav class="">
+      <a href="/">↩ Main</a>
+      <!-- <a href="cuts.html">Cuts</a> -->
+    </nav>
+
+    <main>
       <h1>
         Слайд
         <span class="slideId"></span>
       </h1>
 
-      <div id="map"></div>
+      <div class="content-view">
+        <div id="map"></div>
 
-      <table id="metainfo">
-        <tr>
-          <td>Код</td>
-          <td class="slideId"></td>
-        </tr>
-        <tr>
-          <td>Пол</td>
-          <td>M</td>
-        </tr>
-        <tr>
-          <td>Возраст на момент забора образца</td>
-          <td>56</td>
-        </tr>
-        <tr>
-          <td>Предварительный диагноз</td>
-          <td>глиома головного мозга</td>
-        </tr>
-        <tr>
-          <td>Верификация</td>
-          <td>глиобластома Грейд 4</td>
-        </tr>
-        <tr>
-          <td>Окончательный диагноз</td>
-          <td>глиобластома Грейд 4</td>
-        </tr>
-        <tr>
-          <td>Разное/примечания</td>
-          <td>глиома головного мозга</td>
-        </tr>
-        <tr>
-          <td>Источник препарата</td>
-          <td><a href="#">ДГТУ</a></td>
-        </tr>
-        <tr>
-          <td colspan="2" id="downloadslide"></td>
-        </tr>
-      </table>
-    </div>
+        <table class="metadata">
+          <tr>
+            <td>Код</td>
+            <td class="slideId"></td>
+          </tr>
+
+          <tr>
+            <td>Пол</td>
+            <td>M</td>
+          </tr>
+
+          <tr>
+            <td>Возраст на момент забора образца</td>
+            <td>56</td>
+          </tr>
+
+          <tr>
+            <td>Предварительный диагноз</td>
+            <td>глиома головного мозга</td>
+          </tr>
+
+          <tr>
+            <td>Верификация</td>
+            <td>глиобластома Грейд 4</td>
+          </tr>
+
+          <tr>
+            <td>Окончательный диагноз</td>
+            <td>глиобластома Грейд 4</td>
+          </tr>
+
+          <tr>
+            <td>Разное/примечания</td>
+            <td>глиома головного мозга</td>
+          </tr>
+
+          <tr>
+            <td>Источник препарата</td>
+            <td><a href="#">ДГТУ</a></td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td colspan="2" id="downloadslide"></td>
+          </tr>
+        </table>
+      </div>
+    </main>
     <!-- /container -->
   </body>
 </html>

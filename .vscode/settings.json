@@ -1,26 +1,22 @@
 {
+	"editor.formatOnSave": true,
 	"[html]": {
-		"editor.defaultFormatter": "svipas.prettier-plus"
+		"editor.defaultFormatter": "svipas.prettier-plus",
 	},
 	"[javascript]": {
 		"editor.defaultFormatter": "svipas.prettier-plus",
-		"editor.formatOnSave": true
 	},
 	"[javascriptreact]": {
 		"editor.defaultFormatter": "svipas.prettier-plus",
-		"editor.formatOnSave": true
 	},
 	"[typescript]": {
 		"editor.defaultFormatter": "svipas.prettier-plus",
-		"editor.formatOnSave": true
 	},
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "svipas.prettier-plus",
-		"editor.formatOnSave": true
 	},
-	"[css]": {
+	"[postcss]": {
 		"editor.defaultFormatter": "svipas.prettier-plus",
-		"editor.formatOnSave": true
 	},
 	"editor.rulers": [
 		80,

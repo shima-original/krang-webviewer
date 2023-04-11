@@ -16,10 +16,12 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="src/krang-dataset.js"></script>
-    <link href="src/overview.css" rel="stylesheet" />
+    <script src="src/main.js"></script>
+    <link href="src/main.css" rel="stylesheet" />
 
     <script>
+      globalThis.store = { ...(globalThis.store ?? {}) };
+
       const Card = ({ id, fragmentURL, previewURL }) => {
         const classes = {
           fileExistsIcon: fragmentURL ? "" : "hidden",
@@ -72,17 +74,21 @@
       $(document).ready(() => {
         const overviewRoot = $("#overview");
 
-        loadFragmentsCollection().then((entries) => {
-          /*
-           * Making the fragments registry available globally once the data is downloaded
-           */
-          window.fragments = entries;
-
-          Object.values(entries).forEach((entry) =>
+        loadFragmentsCollection().then((fragments) => {
+          if (!globalThis.store.fragments) {
             /*
-             * Only render entries with preview URL existing
+             * Making the fragments registry available globally once the data is downloaded
              */
-            entry.previewURL ? overviewRoot.append(Card(entry)) : void null
+            globalThis.store = { ...globalThis.store, fragments };
+          }
+
+          Object.values(fragments).forEach((fragment) =>
+            /*
+             * Only render fragments with preview URL existing
+             */
+            fragment.previewURL
+              ? overviewRoot.append(Card(fragment))
+              : void null
           );
         });
       });
@@ -91,14 +97,14 @@
 
   <body>
     <nav class="cuts">
-      <!-- <a href="cuts.html">Cuts ( deprecated )</a> -->
+      <!-- <a href="cuts.html">Cuts</a> -->
     </nav>
 
-    <div class="container">
+    <main class="container">
       <h1>Сканы гистологических препаратов головного мозга</h1>
 
-      <div id="overview"></div>
-    </div>
+      <div id="overview" class="asset-catalog"></div>
+    </main>
     <!-- /container -->
   </body>
 </html>

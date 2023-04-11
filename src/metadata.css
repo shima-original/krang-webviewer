@@ -1,0 +1,36 @@
+.metadata {
+  width: 30vw;
+  height: fit-content;
+}
+
+.metadata tbody {
+  border: 2px solid #000000;
+}
+
+.metadata tr {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid #000000;
+  padding: 1rem;
+  gap: 2rem;
+}
+
+.metadata tr:hover {
+  background-color: lightblue;
+}
+
+.metadata td {
+  font-size: 1.05rem;
+}
+
+.metadata td:first-of-type {
+  font-weight: bold;
+}
+
+.metadata td:last-of-type {
+  text-align: end;
+}
+
+.metadata td {
+  display: flex;
+}
