@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
     <link href="src/overview.css" rel="stylesheet" />
     <title>Krang Dataset - Cuts</title>
+
     <script>
       async function onLoad() {
         try {
@@ -33,43 +34,6 @@
           );
           console.error("Can't load list of files: ", e);
         }
-      }
-
-      async function loadList() {
-        const filenames = [];
-
-        let response = await fetch(
-          "https://storage.yandexcloud.net/krang-dataset?list-type=2"
-        );
-
-        let text = await response.text();
-        let parser = new DOMParser();
-        let doc = await parser.parseFromString(text, "text/xml");
-
-        function traverse(rootTag, maxDeepness, tagCallback, path = "") {
-          if (!rootTag.tagName) return;
-          let myPath = path + "." + rootTag.tagName;
-          tagCallback(myPath, rootTag);
-
-          if (maxDeepness > 0) {
-            rootTag.childNodes.forEach((child) => {
-              traverse(child, maxDeepness - 1, tagCallback, myPath);
-            });
-          }
-        }
-
-        const previewPattern = /^[0-9a-f]{12}-cut__.*/;
-
-        traverse(doc.documentElement, 5, (path, tag) => {
-          if (path == ".ListBucketResult.Contents.Key") {
-            if (previewPattern.test(tag.textContent)) {
-              filenames.push(tag.textContent);
-            }
-          }
-        });
-
-        console.log("filenames", filenames);
-        return filenames;
       }
     </script>
   </head>

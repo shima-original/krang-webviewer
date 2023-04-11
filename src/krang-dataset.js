@@ -6,11 +6,11 @@ const patterns = {
   preview: /[0-9a-f]{12}-preview.jpg/,
 };
 
-function traverseXMLDocument(rootNode, maxDepth, nodeHandler, path = "") {
+const traverseXMLDocument = (rootNode, maxDepth, nodeHandler, path = "") => {
   if (!rootNode.tagName) {
     return void null;
   } else {
-    const nodePath = path + "." + rootNode.tagName;
+    const nodePath = `${path}.${rootNode.tagName}`;
 
     nodeHandler(nodePath, rootNode);
 
@@ -22,7 +22,7 @@ function traverseXMLDocument(rootNode, maxDepth, nodeHandler, path = "") {
   }
 }
 
-async function loadFragmentsCollection() {
+const loadFragmentsCollection = async() => {
   try {
     const response = await fetch(
       "https://storage.yandexcloud.net/krang-dataset?list-type=2"

@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>Krang Dataset</title>
+
     <meta
       name="viewport"
       content="width = device - width, initial-scale = 1.0, shrink-to-fit = no"
@@ -12,9 +13,9 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
     <script src="src/krang-dataset.js"></script>
     <link href="src/overview.css" rel="stylesheet" />
 
@@ -27,11 +28,11 @@
 
         return `
           <a
-            href='deepzoom.html#${id}'
-            class='preview-card'
-            style='background-image: url(${previewURL})'
+						href="deepzoom.html#${id}"
+						class="preview-card"
+						style="background-image: url(${previewURL})"
           >
-            <p class='slide-id'>${id}</p>
+            <p class="slide-id">${id}</p>
 
             <svg
               class="bi bi-bag-check-fill ${classes.fileExistsIcon}"
