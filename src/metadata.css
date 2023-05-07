@@ -37,5 +37,7 @@
 
 .icons {
   background-color:  white;
-  border: 2px solid lightblue;
+  border-bottom: 2px solid lightblue;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
