@@ -2,8 +2,9 @@ const parser = new DOMParser()
 
 const patterns = {
 	fragment: /[0-9a-f]{12}-cut/,
-	fragmentId: /[0-9a-f]{12}/,
+	fullImage: /[0-9a-f]{12}.tiff/,
 	preview: /[0-9a-f]{12}-preview.jpg/,
+	slideId: /[0-9a-f]{12}/,
 }
 
 const traverseXMLDocument = (rootNode, maxDepth, nodeHandler, path = "") => {
@@ -22,7 +23,7 @@ const traverseXMLDocument = (rootNode, maxDepth, nodeHandler, path = "") => {
 	}
 }
 
-const loadFragmentsCollection = async () => {
+const loadSlideCollection = async () => {
 	try {
 		const response = await fetch("https://storage.yandexcloud.net/krang-dataset?list-type=2")
 
@@ -40,10 +41,12 @@ const loadFragmentsCollection = async () => {
 					/*
 					 * Get fragment's id if it's possible
 					 */
-					const fragmentId = xmlNode.textContent.match(patterns.fragmentId)?.at(0)
+					const slideId = xmlNode.textContent.match(patterns.slideId)?.at(0)
 
-					if (fragmentId) {
+					if (slideId) {
 						const URL = `https://krang-dataset.website.yandexcloud.net/${xmlNode.textContent}`
+
+						const fragmentId = URL.split("cut__")[1]?.split(".")[0]
 
 						entries = {
 							/*
@@ -54,24 +57,34 @@ const loadFragmentsCollection = async () => {
 							/*
 							 * Index fragments by id
 							 */
-							[fragmentId]: {
+							[slideId]: {
 								/*
 								 * Make every fragment "know" its position in the collection
 								 */
-								id: fragmentId,
+								id: slideId,
 
 								/*
 								 * Extend the existing fragment data if it exists
 								 */
-								...(entries[fragmentId] ?? {}),
+								...(entries[slideId] ?? {}),
 
 								/*
-								 * Append fragments file URL if it's detected
+								 * Append slide fragment URL if it's detected
 								 */
-								...(patterns.fragment.test(xmlNode.textContent) ? { fragmentURL: URL } : {}),
+								...(patterns.fragment.test(xmlNode.textContent) ? {
+									fragments: {
+										...(entries[slideId]?.fragments ?? {}),
+										[fragmentId]: { id: fragmentId, URL }
+									}
+								} : {}),
 
 								/*
-								 * Append fragments preview file URL if it's detected
+								 * Append slide full image URL if it's detected
+								 */
+								...(patterns.fullImage.test(xmlNode.textContent) ? { fullImageURL: URL } : {}),
+
+								/*
+								 * Append slide preview URL if it's detected
 								 */
 								...(patterns.preview.test(xmlNode.textContent) ? { previewURL: URL } : {}),
 							},

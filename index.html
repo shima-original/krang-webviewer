@@ -14,8 +14,8 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <script src="src/main.js"></script>
     <link href="src/main.css" rel="stylesheet" />
 
@@ -29,7 +29,7 @@
         };
 
         return `
-          
+
         <a
           href="deepzoom.html#${id}"
           class="preview-card"
@@ -77,17 +77,17 @@
       $(document).ready(() => {
         const overviewRoot = $("#overview");
 
-        loadFragmentsCollection().then((fragments) => {
-          if (!globalThis.store.fragments) {
+        loadSlideCollection().then((slides) => {
+          if (!globalThis.store.slides) {
             /*
-             * Making the fragments registry available globally once the data is downloaded
+             * Making the slides registry available globally once the data is downloaded
              */
-            globalThis.store = { ...globalThis.store, fragments };
+            globalThis.store = { ...globalThis.store, slides };
           }
 
-          Object.values(fragments).forEach((fragment) =>
+          Object.values(slides).forEach((fragment) =>
             /*
-             * Only render fragments with preview URL existing
+             * Only render slides with preview URL existing
              */
             fragment.previewURL
               ? overviewRoot.append(Card(fragment))
@@ -99,8 +99,8 @@
   </head>
 
   <body>
-    <nav class="cuts">
-      <a href="cuts.html">Cuts</a>
+    <nav class="fragments">
+      <a href="fragments.html">Fragments</a>
     </nav>
 
     <main class="container">

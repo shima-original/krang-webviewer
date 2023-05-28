@@ -9,7 +9,6 @@
       rel="stylesheet"
     />
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
     <link
@@ -36,20 +35,20 @@
       $(document).ready(() => {
         $(".slideId").append(slideId);
 
-        loadFragmentsCollection().then((fragments) => {
-          if (!globalThis.store.fragments) {
+        loadSlideCollection().then((slides) => {
+          if (!globalThis.store.slides) {
             /*
-             * Making the fragments registry available globally once the data is downloaded
+             * Making the slides registry available globally once the data is downloaded
              */
-            globalThis.store = { ...globalThis.store, fragments };
+            globalThis.store = { ...globalThis.store, slides };
           }
 
-          const { fragmentURL } = fragments[slideId];
+          const { fullImageURL } = slides[slideId];
 
           $("#downloadslide").append(
-            fragmentURL
+            fullImageURL
               ? `
-								<a class="text-success link" href="${fragmentURL}">
+								<a class="text-success link" href="${fullImageURL}">
 									Скачать слайд ${slideId}
 								</a>
 							`
@@ -112,9 +111,9 @@
   </head>
 
   <body>
-    <nav class="">
+    <nav class="d-flex g-3">
       <a href="/">↩ Main</a>
-      <!-- <a href="cuts.html">Cuts</a> -->
+      <a href="/fragments.html">Fragments</a>
     </nav>
 
     <main>
